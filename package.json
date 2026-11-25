@@ -1,0 +1,497 @@
+{
+  "name": "octave-session",
+  "displayName": "GNU Octave Session",
+  "description": "MATLAB-style workflow for GNU Octave: one persistent session with a Command Window, run file / selection / %% section, breakpoint debugging, a Workspace view and live completion.",
+  "version": "0.2.0",
+  "publisher": "LuukP",
+  "icon": "media/octave-logo.png",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Luuk-GH/octave-session.git"
+  },
+  "homepage": "https://github.com/Luuk-GH/octave-session#readme",
+  "bugs": {
+    "url": "https://github.com/Luuk-GH/octave-session/issues"
+  },
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Debuggers",
+    "Data Science"
+  ],
+  "keywords": [
+    "octave",
+    "gnu octave",
+    "matlab",
+    "m-file",
+    "command window",
+    "repl",
+    "debugger",
+    "workspace",
+    "scientific computing",
+    "mcp"
+  ],
+  "galleryBanner": {
+    "color": "#1e1e1e",
+    "theme": "dark"
+  },
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onLanguage:matlab",
+    "onDebugResolve:octave",
+    "onDebugDynamicConfigurations:octave",
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "octave",
+        "aliases": [
+          "Octave",
+          "octave"
+        ],
+        "extensions": [
+          ".m"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "octave.runFile",
+        "title": "Run File",
+        "category": "Octave",
+        "icon": "$(play)"
+      },
+      {
+        "command": "octave.runSelection",
+        "title": "Run Selection or Line",
+        "category": "Octave"
+      },
+      {
+        "command": "octave.runSection",
+        "title": "Run Section",
+        "category": "Octave"
+      },
+      {
+        "command": "octave.interrupt",
+        "title": "Interrupt",
+        "category": "Octave",
+        "icon": "$(debug-stop)"
+      },
+      {
+        "command": "octave.restart",
+        "title": "Restart Session",
+        "category": "Octave",
+        "icon": "$(debug-restart)"
+      },
+      {
+        "command": "octave.showTerminal",
+        "title": "Show Command Window",
+        "category": "Octave"
+      },
+      {
+        "command": "octave.mcp.setup",
+        "title": "Set Up MCP Server",
+        "category": "Octave"
+      },
+      {
+        "command": "octave.mcp.resetToken",
+        "title": "Reset MCP Token",
+        "category": "Octave"
+      },
+      {
+        "command": "octave.workspace.refresh",
+        "title": "Refresh Workspace",
+        "category": "Octave",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "octave.workspace.clear",
+        "title": "Clear Workspace",
+        "category": "Octave",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "octave.workspace.show",
+        "title": "Show in Command Window",
+        "category": "Octave",
+        "icon": "$(terminal)"
+      },
+      {
+        "command": "octave.workspace.copyValue",
+        "title": "Copy Value",
+        "category": "Octave"
+      },
+      {
+        "command": "octave.workspace.copyExpression",
+        "title": "Copy Expression",
+        "category": "Octave"
+      },
+      {
+        "command": "octave.workspace.delete",
+        "title": "Delete Variable",
+        "category": "Octave",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "octave.showRawTerminal",
+        "title": "Show Command Window as Terminal",
+        "category": "Octave",
+        "icon": "$(terminal)"
+      },
+      {
+        "command": "octave.commandWindow.clear",
+        "title": "Clear Command Window",
+        "category": "Octave",
+        "icon": "$(clear-all)"
+      }
+    ],
+    "menus": {
+      "editor/title/run": [
+        {
+          "command": "octave.runFile",
+          "when": "editorLangId == octave",
+          "group": "navigation@0"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "octave.runSelection",
+          "when": "editorLangId == octave",
+          "group": "octave@1"
+        },
+        {
+          "command": "octave.runSection",
+          "when": "editorLangId == octave",
+          "group": "octave@2"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "octave.workspace.refresh",
+          "when": "view == octave.workspace",
+          "group": "navigation@1"
+        },
+        {
+          "command": "octave.workspace.clear",
+          "when": "view == octave.workspace",
+          "group": "navigation@2"
+        },
+        {
+          "command": "octave.interrupt",
+          "when": "view == octave.commandWindow && octave.busy",
+          "group": "navigation@1"
+        },
+        {
+          "command": "octave.commandWindow.clear",
+          "when": "view == octave.commandWindow",
+          "group": "navigation@2"
+        },
+        {
+          "command": "octave.showRawTerminal",
+          "when": "view == octave.commandWindow",
+          "group": "navigation@3"
+        },
+        {
+          "command": "octave.restart",
+          "when": "view == octave.commandWindow",
+          "group": "navigation@4"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "octave.workspace.show",
+          "when": "view == octave.workspace",
+          "group": "inline@1"
+        },
+        {
+          "command": "octave.workspace.show",
+          "when": "view == octave.workspace",
+          "group": "1_show@1"
+        },
+        {
+          "command": "octave.workspace.copyValue",
+          "when": "view == octave.workspace",
+          "group": "2_copy@1"
+        },
+        {
+          "command": "octave.workspace.copyExpression",
+          "when": "view == octave.workspace",
+          "group": "2_copy@2"
+        },
+        {
+          "command": "octave.workspace.delete",
+          "when": "view == octave.workspace && viewItem == octaveVariable",
+          "group": "3_edit@1"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "octave.workspace.show",
+          "when": "false"
+        },
+        {
+          "command": "octave.workspace.copyValue",
+          "when": "false"
+        },
+        {
+          "command": "octave.workspace.copyExpression",
+          "when": "false"
+        },
+        {
+          "command": "octave.workspace.delete",
+          "when": "false"
+        },
+        {
+          "command": "octave.workspace.refresh",
+          "when": "octave.used"
+        },
+        {
+          "command": "octave.workspace.clear",
+          "when": "octave.used"
+        },
+        {
+          "command": "octave.commandWindow.clear",
+          "when": "octave.used"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "octave.runFile",
+        "key": "f5",
+        "when": "editorTextFocus && editorLangId == octave && !inDebugMode"
+      },
+      {
+        "command": "octave.runSelection",
+        "key": "f9",
+        "when": "editorTextFocus && editorLangId == octave"
+      },
+      {
+        "command": "octave.runSection",
+        "key": "ctrl+enter",
+        "when": "editorTextFocus && editorLangId == octave && !suggestWidgetVisible"
+      },
+      {
+        "command": "octave.workspace.delete",
+        "key": "delete",
+        "when": "focusedView == octave.workspace"
+      }
+    ],
+    "configuration": {
+      "title": "Octave",
+      "properties": {
+        "octave.executable": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Octave to use: the path to `octave-gui.exe` / `octave-cli.exe`, an Octave installation folder, or a command on `PATH`. Leave empty to auto-detect (standard install folders under Program Files or `%LOCALAPPDATA%\\Programs`, a custom install location from the registry, Scoop, then `PATH`). `octave-gui.exe` (run with `--no-gui`) is preferred: its plot windows stay responsive. Machine-specific: not synced between PCs.",
+          "scope": "machine-overridable"
+        },
+        "octave.startupCommands": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Octave commands to run when a session starts (e.g. 'pkg load signal')."
+        },
+        "octave.commandWindow.view": {
+          "type": "string",
+          "enum": [
+            "webview",
+            "terminal"
+          ],
+          "enumDescriptions": [
+            "The Command Window in the panel (next to Terminal): HTML output with clickable file links and collapsible long output, an input line with highlighting, completion and help.",
+            "The raw Octave terminal (a pseudoterminal in the Terminal panel). Closing it ends the session."
+          ],
+          "default": "webview",
+          "markdownDescription": "Which Command Window opens for the Octave session. Both show the same session (same process and workspace); the other one stays available through **Octave: Show Command Window as Terminal** or the Command Window view."
+        },
+        "octave.sectionSeparators": {
+          "type": "boolean",
+          "default": true,
+          "description": "Draw a line above each %% section, like the MATLAB editor."
+        },
+        "octave.mcp.enabled": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Run an MCP server on `127.0.0.1` so AI agents (Claude Code, Copilot, Cursor) can use this live Octave session. Protected by an access token; any agent that has it can run arbitrary Octave code. Use *Octave: Set Up MCP Server* to enable it and copy the connection details.",
+          "scope": "machine-overridable"
+        },
+        "octave.mcp.port": {
+          "type": "integer",
+          "default": 39217,
+          "minimum": 1024,
+          "maximum": 65525,
+          "markdownDescription": "Preferred port of the MCP server. If it is taken (for example by another VS Code window), the next ports up to +10 are tried.",
+          "scope": "machine-overridable"
+        }
+      }
+    },
+    "breakpoints": [
+      {
+        "language": "octave"
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "octave",
+        "label": "Octave",
+        "languages": [
+          "octave"
+        ],
+        "configurationAttributes": {
+          "launch": {
+            "properties": {
+              "program": {
+                "type": "string",
+                "description": "Script to run in the shared Octave session (base workspace).",
+                "default": "${file}"
+              }
+            }
+          },
+          "attach": {
+            "properties": {}
+          }
+        },
+        "initialConfigurations": [
+          {
+            "type": "octave",
+            "request": "launch",
+            "name": "Octave: Run File",
+            "program": "${file}"
+          }
+        ],
+        "configurationSnippets": [
+          {
+            "label": "Octave: Run File",
+            "description": "Run the current script with breakpoints in the shared session",
+            "body": {
+              "type": "octave",
+              "request": "launch",
+              "name": "Octave: Run File",
+              "program": "^\"${file}\""
+            }
+          },
+          {
+            "label": "Octave: Attach",
+            "description": "Attach the debugger to the shared Octave session",
+            "body": {
+              "type": "octave",
+              "request": "attach",
+              "name": "Octave: Attach"
+            }
+          }
+        ]
+      }
+    ],
+    "grammars": [
+      {
+        "language": "octave",
+        "scopeName": "source.octave",
+        "path": "./syntaxes/octave.tmLanguage.json"
+      }
+    ],
+    "colors": [
+      {
+        "id": "octave.sectionSeparator",
+        "description": "Line drawn above %% sections in Octave files.",
+        "defaults": {
+          "dark": "#ffffff30",
+          "light": "#00000030",
+          "highContrast": "contrastBorder",
+          "highContrastLight": "contrastBorder"
+        }
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "octave",
+          "title": "Octave",
+          "icon": "media/workspace.svg"
+        }
+      ],
+      "panel": [
+        {
+          "id": "octavePanel",
+          "title": "Octave",
+          "icon": "media/workspace.svg"
+        }
+      ]
+    },
+    "views": {
+      "octave": [
+        {
+          "id": "octave.workspace",
+          "name": "Workspace",
+          "when": "octave.used",
+          "icon": "media/workspace.svg",
+          "contextualTitle": "Octave"
+        }
+      ],
+      "octavePanel": [
+        {
+          "type": "webview",
+          "id": "octave.commandWindow",
+          "name": "Command Window",
+          "when": "octave.used",
+          "icon": "media/workspace.svg",
+          "contextualTitle": "Octave"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "compile": "npm run typecheck && node esbuild.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p src/commandWindow/webview",
+    "package": "node scripts/vsix-readme.mjs && vsce package --no-rewrite-relative-links --readme-path dist/README.vsix.md",
+    "vscode:prepublish": "npm run typecheck && node esbuild.mjs --production",
+    "smoke": "esbuild scripts/smoke.ts --bundle --platform=node --target=node20 --outfile=dist/smoke.js --log-level=warning && node scripts/run-detached.mjs dist/smoke.js",
+    "test:unit": "esbuild scripts/sections.test.ts --bundle --platform=node --outfile=dist/sections.test.js --log-level=warning && node dist/sections.test.js && esbuild scripts/language.test.ts --bundle --platform=node --outfile=dist/language.test.js --log-level=warning && node dist/language.test.js && esbuild scripts/mcp.test.ts --bundle --platform=node --outfile=dist/mcp.test.js --log-level=warning && node dist/mcp.test.js && esbuild scripts/controlRecords.test.ts --bundle --platform=node --outfile=dist/controlRecords.test.js --log-level=warning && node dist/controlRecords.test.js && esbuild scripts/commandQueue.test.ts --bundle --platform=node --outfile=dist/commandQueue.test.js --log-level=warning && node dist/commandQueue.test.js",
+    "test:integration": "node esbuild.mjs && esbuild scripts/integration.test.ts --bundle --platform=node --format=cjs --external:vscode --outfile=dist/integration.test.js --log-level=warning && node scripts/run-integration.mjs",
+    "test:prompts": "esbuild scripts/prompts.test.ts --bundle --platform=node --target=node20 --outfile=dist/prompts.test.js --log-level=warning && node scripts/run-detached.mjs dist/prompts.test.js",
+    "smoke:debug": "esbuild scripts/debug-smoke.ts --bundle --platform=node --target=node20 --outfile=dist/debug-smoke.js --log-level=warning && node scripts/run-detached.mjs dist/debug-smoke.js",
+    "tokens": "esbuild scripts/dump-tokens.ts --bundle --platform=node --outfile=dist/dump-tokens.js --log-level=warning && node dist/dump-tokens.js",
+    "test:vsix": "npm run package && esbuild scripts/integration.test.ts --bundle --platform=node --format=cjs --external:vscode --outfile=dist/integration.test.js --log-level=warning && node scripts/run-vsix-test.mjs",
+    "agent-host": "node esbuild.mjs && esbuild scripts/agent-host.test.ts --bundle --platform=node --format=cjs --external:vscode --outfile=dist/agent-host.test.js --log-level=warning && node scripts/run-agent-host.mjs"
+  },
+  "devDependencies": {
+    "@codemirror/autocomplete": "^6.20.4",
+    "@codemirror/commands": "^6.11.1",
+    "@codemirror/language": "^6.13.1",
+    "@codemirror/legacy-modes": "^6.5.5",
+    "@codemirror/state": "^6.7.6",
+    "@codemirror/view": "^6.43.15",
+    "@lezer/highlight": "^1.2.5",
+    "@types/node": "^20.19.43",
+    "@types/vscode": "1.95.0",
+    "@vscode/vsce": "^4.1.1",
+    "esbuild": "^0.28.2",
+    "typescript": "~5.9",
+    "vscode-oniguruma": "^2.0.1",
+    "vscode-textmate": "^9.3.2"
+  },
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "Highlighting, outline and folding work in Restricted Mode. Running Octave code, the debugger and live completion need a trusted workspace.",
+      "restrictedConfigurations": [
+        "octave.executable",
+        "octave.startupCommands",
+        "octave.mcp.enabled",
+        "octave.mcp.port"
+      ]
+    },
+    "virtualWorkspaces": {
+      "supported": false,
+      "description": "Octave runs files from the local disk."
+    }
+  }
+}

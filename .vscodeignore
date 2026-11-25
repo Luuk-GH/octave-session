@@ -1,0 +1,22 @@
+.vscode/**
+src/**
+scripts/**
+spike/**
+test/**
+node_modules/**
+**/*.map
+tsconfig.json
+esbuild.mjs
+PLAN.md
+CLAUDE.md
+.gitignore
+# Only the bundled extension is shipped from dist/ (test and debug bundles stay out).
+dist/**
+!dist/extension.js
+!dist/commandWindow.js
+agent-toolkit/**
+demo-video/**
+media/overview.png
+README.md
+share/**
+media/gifs/**

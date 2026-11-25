@@ -1,0 +1,23 @@
+{
+  "comments": { "lineComment": "%", "blockComment": ["%{", "%}"] },
+  "brackets": [["[", "]"], ["(", ")"], ["{", "}"]],
+  "autoClosingPairs": [
+    { "open": "[", "close": "]" }, { "open": "(", "close": ")" }, { "open": "{", "close": "}" },
+    { "open": "\"", "close": "\"", "notIn": ["string", "comment"] }
+  ],
+  "autoCloseBefore": ";:.,=}])> \n\t",
+  "surroundingPairs": [["[", "]"], ["(", ")"], ["{", "}"], ["\"", "\""], ["'", "'"]],
+  "folding": { "markers": { "start": "^\\s*(%%|##)(?![%#])", "end": "^\\s*(%%|##)(?![%#])" } },
+  "wordPattern": "(-?\\d*\\.\\d\\w*)|([^\\`\\~\\!\\@\\#\\$\\%\\^\\&\\*\\(\\)\\-\\=\\+\\[\\{\\]\\}\\\\\\|\\;\\:\\'\\\"\\,\\.\\<\\>\\/\\?\\s]+)",
+  "indentationRules": {
+    "increaseIndentPattern": "^\\s*(function|if|elseif|else|for|parfor|while|switch|case|otherwise|try|catch|unwind_protect|unwind_protect_cleanup|do|spmd|classdef|properties|methods|events|enumeration)\\b(?!.*[,;]\\s*(end|endif|endfor|endwhile|endfunction|endswitch|end_try_catch)\\b\\s*;?\\s*([%#].*)?$)",
+    "decreaseIndentPattern": "^\\s*(end|endif|endfor|endparfor|endwhile|endswitch|end_try_catch|end_unwind_protect|endfunction|endclassdef|endproperties|endmethods|endevents|endenumeration|endspmd|until|elseif|else|case|otherwise|catch|unwind_protect_cleanup)\\b"
+  },
+  "onEnterRules": [
+    {
+      "beforeText": "^\\s*%(?![{%]).*$",
+      "afterText": "^.+$",
+      "action": { "indent": "none", "appendText": "% " }
+    }
+  ]
+}

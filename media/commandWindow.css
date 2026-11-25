@@ -1,0 +1,161 @@
+/* Octave Command Window webview. Colours come from the VS Code theme (terminal and editor colours). */
+:root {
+  --cw-line-height: 1.45;
+  --cw-fg: var(--vscode-terminal-foreground, var(--vscode-editor-foreground));
+  --cw-bg: var(--vscode-panel-background, var(--vscode-editor-background));
+  --cw-dim: var(--vscode-descriptionForeground);
+  --cw-error: var(--vscode-terminal-ansiRed, var(--vscode-errorForeground));
+  --cw-warning: var(--vscode-terminal-ansiYellow, var(--vscode-editorWarning-foreground));
+  --cw-keyword: var(--vscode-symbolIcon-keywordForeground, #569cd6);
+  --cw-string: var(--vscode-debugTokenExpression-string, #ce9178);
+  --cw-number: var(--vscode-debugTokenExpression-number, #b5cea8);
+  --cw-comment: var(--vscode-terminal-ansiGreen, #6a9955);
+  --cw-builtin: var(--vscode-symbolIcon-functionForeground, #dcdcaa);
+  --cw-operator: var(--cw-fg);
+  --cw-bracket: var(--cw-fg);
+}
+body.vscode-light {
+  --cw-keyword: var(--vscode-symbolIcon-keywordForeground, #0000ff);
+  --cw-string: var(--vscode-debugTokenExpression-string, #a31515);
+  --cw-number: var(--vscode-debugTokenExpression-number, #098658);
+  --cw-comment: #008000;
+  --cw-builtin: var(--vscode-symbolIcon-functionForeground, #795e26);
+}
+
+html, body { height: 100%; }
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  color: var(--cw-fg);
+  background: var(--cw-bg);
+  font-family: var(--vscode-editor-font-family, Consolas, monospace);
+  font-size: var(--vscode-editor-font-size, 14px);
+  line-height: var(--cw-line-height);
+  overflow: hidden;
+}
+
+#output {
+  flex: 1 1 auto;
+  min-height: 0;          /* shrink first: the input line must stay visible in a short panel */
+  overflow-y: auto;
+  padding: 6px 14px 2px 14px;
+  user-select: text;
+  outline: none;
+}
+.block { position: relative; }
+.cmd { white-space: pre-wrap; word-break: break-word; }
+.cmd-prompt { color: var(--cw-dim); user-select: none; }
+pre.out {
+  margin: 0;
+  font: inherit;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+pre.out:empty { display: none; }
+.err { color: var(--cw-error); }
+.warn { color: var(--cw-warning); }
+.dbg { color: var(--cw-dim); }
+.stdin { color: var(--cw-fg); font-weight: 600; }
+.info { color: var(--cw-dim); font-style: italic; white-space: pre-wrap; }
+
+/* Echoed commands: same colours as the input line */
+.tok-keyword { color: var(--cw-keyword); }
+.tok-string { color: var(--cw-string); }
+.tok-number { color: var(--cw-number); }
+.tok-comment { color: var(--cw-comment); font-style: italic; }
+.tok-builtin { color: var(--cw-builtin); }
+
+a.link {
+  color: var(--vscode-textLink-foreground);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+a.link:hover { color: var(--vscode-textLink-activeForeground); }
+
+/* Long outputs: collapsed to a few lines once the command finishes */
+.block.collapsed pre.out {
+  max-height: calc(1em * var(--cw-line-height) * 12);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 65%, transparent);
+  mask-image: linear-gradient(to bottom, #000 65%, transparent);
+}
+button.toggle {
+  display: block;
+  margin: 2px 0 4px 0;
+  padding: 1px 8px;
+  font: inherit;
+  font-size: 0.9em;
+  color: var(--vscode-textLink-foreground);
+  background: var(--vscode-button-secondaryBackground, transparent);
+  border: 1px solid var(--vscode-button-border, transparent);
+  border-radius: 3px;
+  cursor: pointer;
+}
+button.toggle:hover { background: var(--vscode-button-secondaryHoverBackground); }
+
+/* Function hint under the input line */
+#hint {
+  flex: 0 0 auto;
+  padding: 0 14px;
+  min-height: 0;
+  color: var(--cw-dim);
+  font-size: 0.92em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#hint:not(:empty) { padding-top: 2px; border-top: 1px dashed var(--vscode-panel-border, transparent); }
+.hint-sig { color: var(--cw-fg); }
+
+/* Input line */
+#inputRow {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 4px 14px 6px 14px;
+  border-top: 1px solid var(--vscode-panel-border, rgba(128, 128, 128, 0.35));
+}
+#prompt {
+  flex: 0 0 auto;
+  min-width: 2.2ch;
+  white-space: pre;
+  color: var(--cw-dim);
+  user-select: none;
+}
+#prompt.mode-debug { color: var(--vscode-debugIcon-pauseForeground, var(--cw-warning)); }
+#prompt.mode-input { color: var(--vscode-textLink-foreground); }
+body[data-mode="busy"] #prompt { opacity: 0.5; }
+#editor { flex: 1 1 auto; min-width: 0; max-height: 40vh; overflow-y: auto; }
+
+#stop {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 1px 9px;
+  font-family: var(--vscode-font-family);
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--vscode-button-foreground);
+  background: var(--vscode-statusBarItem-errorBackground, #c72e0f);
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+#stop[hidden] { display: none; }
+#stop:hover { filter: brightness(1.15); }
+.stop-icon { width: 8px; height: 8px; background: currentColor; display: inline-block; }
+
+/* Help tooltip */
+.help-tooltip { max-width: 520px; padding: 4px 8px; font-size: 0.95em; }
+.help-sig { font-family: var(--vscode-editor-font-family); white-space: pre-wrap; }
+.help-doc { margin-top: 4px; font-family: var(--vscode-font-family); color: var(--cw-dim); white-space: normal; }
+.help-file { display: block; margin-top: 4px; font-size: 0.9em; }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: var(--vscode-scrollbarSlider-background); }
+::-webkit-scrollbar-thumb:hover { background: var(--vscode-scrollbarSlider-hoverBackground); }

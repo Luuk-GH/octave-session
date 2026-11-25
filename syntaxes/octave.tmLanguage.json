@@ -1,0 +1,204 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Octave",
+  "scopeName": "source.octave",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#function-declaration" },
+    { "include": "#classdef-declaration" },
+    { "include": "#command-syntax" },
+    { "include": "#keywords" },
+    { "include": "#expression" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        { "include": "#block-comment" },
+        {
+          "name": "comment.line.section.octave",
+          "match": "^\\s*((%%|##)(?![%#]))(.*)$",
+          "captures": {
+            "1": { "name": "punctuation.definition.comment.octave" },
+            "3": { "name": "markup.heading.section.octave entity.name.section.octave" }
+          }
+        },
+        {
+          "name": "comment.line.percentage.octave",
+          "match": "(%).*$",
+          "captures": { "1": { "name": "punctuation.definition.comment.octave" } }
+        },
+        {
+          "name": "comment.line.number-sign.octave",
+          "match": "(#).*$",
+          "captures": { "1": { "name": "punctuation.definition.comment.octave" } }
+        },
+        {
+          "match": "(\\.\\.\\.)(.*)$",
+          "captures": {
+            "1": { "name": "punctuation.separator.continuation.octave" },
+            "2": { "name": "comment.line.continuation.octave" }
+          }
+        }
+      ]
+    },
+    "block-comment": {
+      "name": "comment.block.octave",
+      "begin": "^\\s*([%#]\\{)\\s*$",
+      "end": "^\\s*([%#]\\})\\s*$",
+      "beginCaptures": { "1": { "name": "punctuation.definition.comment.begin.octave" } },
+      "endCaptures": { "1": { "name": "punctuation.definition.comment.end.octave" } },
+      "patterns": [{ "include": "#block-comment" }]
+    },
+    "function-declaration": {
+      "match": "(?<![\\w.])(function)\\s+(?:(?:(\\[)([^\\]]*)(\\])|([A-Za-z_]\\w*))\\s*(=)\\s*)?([A-Za-z_][\\w.]*)(?:\\s*(\\()([^)%#]*)(\\)?))?",
+      "captures": {
+        "1": { "name": "storage.type.function.octave" },
+        "2": { "name": "punctuation.section.brackets.begin.octave" },
+        "3": { "patterns": [{ "match": "[A-Za-z_]\\w*", "name": "variable.parameter.output.octave" }] },
+        "4": { "name": "punctuation.section.brackets.end.octave" },
+        "5": { "name": "variable.parameter.output.octave" },
+        "6": { "name": "keyword.operator.assignment.octave" },
+        "7": { "name": "entity.name.function.octave" },
+        "8": { "name": "punctuation.definition.parameters.begin.octave" },
+        "9": { "patterns": [{ "match": "[A-Za-z_]\\w*|~", "name": "variable.parameter.input.octave" }] },
+        "10": { "name": "punctuation.definition.parameters.end.octave" }
+      }
+    },
+    "classdef-declaration": {
+      "match": "^\\s*(classdef)\\b(?:\\s*\\(([^)]*)\\))?\\s*([A-Za-z_]\\w*)(?:\\s*(<)\\s*([^%#\\n]*))?",
+      "captures": {
+        "1": { "name": "storage.type.class.octave" },
+        "2": { "name": "meta.class.attributes.octave" },
+        "3": { "name": "entity.name.type.class.octave" },
+        "4": { "name": "punctuation.separator.inheritance.octave" },
+        "5": { "patterns": [{ "match": "[A-Za-z_][\\w.]*", "name": "entity.other.inherited-class.octave" }] }
+      }
+    },
+    "command-syntax": {
+      "comment": "Command syntax such as `hold on` or `pkg load signal`: the arguments are text.",
+      "match": "^\\s*(hold|format|pkg|close|clear|clc|clf|more|warning|graphics_toolkit|cd|load|save|grid|axis|box|echo|diary|which|help|doc|type|edit|dbstop|dbclear|addpath|rmpath|figure|drawnow|disp)\\s+(?![\\s=(]|[-+*/^<>&|~!]=?\\s)([^;,%#\\n]+)",
+      "captures": {
+        "1": { "name": "support.function.command.octave" },
+        "2": { "name": "string.unquoted.command-argument.octave" }
+      }
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.octave",
+          "match": "(?<![\\w.])(if|elseif|else|end|endif|for|endfor|parfor|endparfor|while|endwhile|do|until|switch|case|otherwise|endswitch|try|catch|end_try_catch|unwind_protect|unwind_protect_cleanup|end_unwind_protect|break|continue|return|spmd|endspmd|endfunction|endclassdef|properties|endproperties|methods|endmethods|events|endevents|enumeration|endenumeration)(?![\\w])"
+        },
+        {
+          "name": "storage.type.function.octave",
+          "match": "(?<![\\w.])function(?![\\w])"
+        },
+        {
+          "name": "storage.modifier.octave",
+          "match": "(?<![\\w.])(global|persistent)(?![\\w])"
+        }
+      ]
+    },
+    "expression": {
+      "patterns": [
+        { "include": "#comments" },
+        { "include": "#string-double" },
+        { "include": "#string-single" },
+        { "include": "#transpose" },
+        { "include": "#brackets" },
+        { "include": "#constants" },
+        { "include": "#numbers" },
+        { "include": "#builtins" },
+        { "include": "#operators" },
+        { "include": "#field" }
+      ]
+    },
+    "brackets": {
+      "patterns": [
+        {
+          "name": "meta.parens.octave",
+          "begin": "\\(",
+          "end": "\\)",
+          "beginCaptures": { "0": { "name": "punctuation.section.parens.begin.octave" } },
+          "endCaptures": { "0": { "name": "punctuation.section.parens.end.octave" } },
+          "patterns": [{ "include": "#index-end" }, { "include": "#expression" }]
+        },
+        {
+          "name": "meta.brackets.octave",
+          "begin": "\\[",
+          "end": "\\]",
+          "beginCaptures": { "0": { "name": "punctuation.section.brackets.begin.octave" } },
+          "endCaptures": { "0": { "name": "punctuation.section.brackets.end.octave" } },
+          "patterns": [{ "include": "#index-end" }, { "include": "#expression" }]
+        },
+        {
+          "name": "meta.braces.octave",
+          "begin": "\\{",
+          "end": "\\}",
+          "beginCaptures": { "0": { "name": "punctuation.section.braces.begin.octave" } },
+          "endCaptures": { "0": { "name": "punctuation.section.braces.end.octave" } },
+          "patterns": [{ "include": "#index-end" }, { "include": "#expression" }]
+        }
+      ]
+    },
+    "index-end": {
+      "comment": "`end` inside an index, e.g. a(end) or c{end-1}.",
+      "name": "variable.language.end.octave",
+      "match": "(?<![\\w.])end(?![\\w])"
+    },
+    "string-double": {
+      "name": "string.quoted.double.octave",
+      "begin": "\"",
+      "end": "\"(?!\")|$",
+      "beginCaptures": { "0": { "name": "punctuation.definition.string.begin.octave" } },
+      "endCaptures": { "0": { "name": "punctuation.definition.string.end.octave" } },
+      "patterns": [
+        { "name": "constant.character.escape.octave", "match": "\\\\(?:[abfnrtv\\\\\"'0]|[0-7]{1,3}|x\\h{1,2})|\"\"" },
+        { "name": "constant.other.placeholder.octave", "match": "%(?:%|[-+ #0]*(?:\\d+|\\*)?(?:\\.(?:\\d+|\\*))?[diouxXeEfgGcs])" }
+      ]
+    },
+    "string-single": {
+      "name": "string.quoted.single.octave",
+      "begin": "(?<![\\w)\\]}'.])'",
+      "end": "'(?!')|$",
+      "beginCaptures": { "0": { "name": "punctuation.definition.string.begin.octave" } },
+      "endCaptures": { "0": { "name": "punctuation.definition.string.end.octave" } },
+      "patterns": [
+        { "name": "constant.character.escape.octave", "match": "''" },
+        { "name": "constant.other.placeholder.octave", "match": "%(?:%|[-+ #0]*(?:\\d+|\\*)?(?:\\.(?:\\d+|\\*))?[diouxXeEfgGcs])|\\\\[nt\\\\]" }
+      ]
+    },
+    "transpose": {
+      "name": "keyword.operator.transpose.octave",
+      "match": "(?<=[\\w)\\]}'.])\\.?'"
+    },
+    "constants": {
+      "name": "constant.language.octave",
+      "match": "(?<![\\w.])(true|false|pi|Inf|inf|NaN|nan|NA|eps|realmax|realmin|intmax|intmin|flintmax|nargin|nargout|varargin|varargout|ans)(?![\\w])"
+    },
+    "numbers": {
+      "name": "constant.numeric.octave",
+      "match": "(?<![\\w.])(?:0[xX]\\h+|0[bB][01]+|(?:\\d+\\.?\\d*|\\.\\d+)(?:[eEdD][+-]?\\d+)?)[ijIJ]?(?![\\w])"
+    },
+    "builtins": {
+      "name": "support.function.builtin.octave",
+      "match": "(?<![\\w.])(abs|all|any|arrayfun|cat|ceil|cell|cellfun|char|class|cos|cumsum|deal|diag|disp|double|error|eval|exist|exp|eye|fclose|feval|fieldnames|find|fix|fliplr|floor|fopen|fprintf|fread|fwrite|func2str|horzcat|imag|input|int2str|isa|iscell|ischar|isempty|isfield|isnumeric|isreal|isstruct|keyboard|length|linspace|log|log10|logical|max|mean|median|min|mod|ndims|num2str|numel|ones|plot|printf|prod|rand|randn|real|regexp|regexprep|rem|repmat|reshape|round|sign|sin|size|sort|sprintf|sqrt|std|str2double|str2func|strcat|strcmp|strcmpi|strfind|strjoin|strrep|strsplit|strtrim|struct|sum|tan|tic|toc|unique|upper|lower|vertcat|warning|zeros|figure|subplot|xlabel|ylabel|zlabel|title|legend|hold|grid|axis|surf|mesh|scatter|bar|histc|hist|semilogx|semilogy|loglog|close|isfinite|isnan|isinf|cellfun|containers\\.Map)(?![\\w])"
+    },
+    "operators": {
+      "patterns": [
+        { "name": "keyword.operator.comparison.octave", "match": "==|~=|!=|<=|>=|<|>" },
+        { "name": "keyword.operator.logical.octave", "match": "&&|\\|\\||&|\\||!|~" },
+        { "name": "keyword.operator.assignment.octave", "match": "\\+=|-=|\\*=|/=|\\^=|=" },
+        { "name": "keyword.operator.arithmetic.octave", "match": "\\+\\+|--|\\.\\*|\\./|\\.\\\\|\\.\\^|\\*|/|\\\\|\\^|\\+|-" },
+        { "name": "keyword.operator.range.octave", "match": ":" },
+        { "name": "punctuation.separator.octave", "match": "[,;]" }
+      ]
+    },
+    "field": {
+      "match": "(\\.)([A-Za-z_]\\w*)",
+      "captures": {
+        "1": { "name": "punctuation.accessor.octave" },
+        "2": { "name": "variable.other.property.octave" }
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "octave-core",
+  "description": "Run, debug, test and review GNU Octave code in the user's live Octave session in VS Code (needs the octave-session extension's MCP server).",
+  "version": "0.1.0",
+  "author": { "name": "octave-session extension" },
+  "keywords": ["octave", "matlab", "mcp"]
+}

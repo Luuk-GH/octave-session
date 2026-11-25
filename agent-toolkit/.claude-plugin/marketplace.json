@@ -1,0 +1,15 @@
+{
+  "name": "octave-agentic-toolkit",
+  "owner": { "name": "octave-session extension" },
+  "metadata": { "description": "Skills that teach AI agents to use the GNU Octave session of the octave-session VS Code extension through its MCP server." },
+  "plugins": [
+    {
+      "name": "octave-core",
+      "source": "./octave-core",
+      "description": "Run, debug, test and review GNU Octave code in the live VS Code session.",
+      "version": "0.1.0",
+      "category": "development",
+      "keywords": ["octave", "matlab", "mcp", "debugging", "testing"]
+    }
+  ]
+}
