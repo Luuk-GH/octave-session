@@ -4,7 +4,7 @@
   "description": "MATLAB-style workflow for GNU Octave: one persistent session with a Command Window, run file / selection / %% section, breakpoint debugging, a Workspace view and live completion.",
   "version": "0.2.0",
   "publisher": "LuukP",
-  "icon": "media/octave-logo.png",
+  "icon": "media/icon.png",
   "license": "MIT",
   "repository": {
     "type": "git",

@@ -5,6 +5,7 @@
 - **First Marketplace release**, published as `LuukP.octave-session`. If you installed an earlier .vsix
   (`local.octave-session`), uninstall it first: both register the same commands.
 - README with highlight GIFs for each feature.
+- New icon: the Octave ring drawn as a vinyl record.
 - With the Command Window as the default view, starting the debugger no longer switches the panel to VS Code's
   Debug Console (Octave's Command Window is where you type while paused). Set `internalConsoleOptions` in a
   launch configuration to change this.

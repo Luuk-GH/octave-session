@@ -168,5 +168,5 @@ npm run test:integration # end-to-end in a separate VS Code instance
 
 ## Credits
 
-The extension icon is the GNU Octave logo, taken from the GNU Octave distribution. This extension is not part of
-or endorsed by the GNU Octave project.
+The icon is based on the GNU Octave logo, with record grooves added for the "session". This extension is not part
+of or endorsed by the GNU Octave project or MathWorks.
